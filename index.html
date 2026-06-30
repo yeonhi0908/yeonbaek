@@ -599,7 +599,7 @@
         </div>
         
         <div>
-            <div style="font-size: 10px; font-weight: bold; color: #718096; margin-bottom: 4px;">추천 색상</div>
+            <div id="popoverPresetLabel" style="font-size: 10px; font-weight: bold; color: #718096; margin-bottom: 4px;">추천 색상</div>
             <div id="popoverPresets" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
         </div>
     </div>
@@ -1333,7 +1333,7 @@ function handleDrop(event, targetName) {
         if(targetInput && draggedInput) {
             draggedInput.value = targetInput.value;
             showToast(`🥑 [${draggedCharName}]의 이미지 링크가 [${targetName}]와 똑같이 설정되었습니다!`);
-            saveImagesToStorage(true);
+            // ⚠️ 자동 저장 호출 제거 (이제 이미지 저장 버튼을 눌러야만 저장됩니다)
         }
     }
     draggedCharName = null;
@@ -2292,18 +2292,18 @@ function openColorPicker(event, mode, targetId, charName = null) {
     popover.style.top = `${topPos}px`;
     popover.style.left = `${leftPos}px`;
     
-    const popoverTitle = document.getElementById('popoverTitle');
+    const popoverTitle = document.getElementById('popoverPresetLabel');
     let currentColor = '#181a1c';
     
     if (mode === 'char') {
-        popoverTitle.innerText = "🎨 캐릭터 색상 변경";
+        if (popoverTitle) popoverTitle.innerText = "🎨 캐릭터 색상 변경";
         currentColor = characters[charName].color || '#181a1c';
     } else if (mode === 'wordText') {
-        popoverTitle.innerText = "🎨 글자 색상 선택";
+        if (popoverTitle) popoverTitle.innerText = "🎨 글자 색상 선택";
         const row = document.getElementById(targetId);
         currentColor = row ? row.dataset.textCol : '#4A8A54';
     } else if (mode === 'wordBg') {
-        popoverTitle.innerText = "🎨 배경 색상 선택";
+        if (popoverTitle) popoverTitle.innerText = "🎨 배경 색상 선택";
         const row = document.getElementById(targetId);
         currentColor = row ? row.dataset.bgCol : '#6BB376';
     }
@@ -2339,7 +2339,7 @@ function generatePopoverPresets(hex) {
     let presets = [];
     
     if (pickerMode === 'char') {
-        presetLabel.innerText = "추천 조합 색상";
+        if (presetLabel) presetLabel.innerText = "추천 조합 색상";
         presets = ['#181a1c', '#ffffff', '#868e96'];
         try {
             let hsl = hexToHsl(hex);
@@ -2366,7 +2366,7 @@ function generatePopoverPresets(hex) {
         }
     } 
     else if (pickerMode === 'wordText') {
-        presetLabel.innerText = "배경 테마 최적화 글자색 (보색 포함)";
+        if (presetLabel) presetLabel.innerText = "배경 테마 최적화 글자색 (보색 포함)";
         const currentTheme = BG_THEMES[currentBgTheme] || BG_THEMES['dark'];
         const isDarkTheme = currentTheme.isDark;
         
@@ -2386,7 +2386,7 @@ function generatePopoverPresets(hex) {
         }
     } 
     else if (pickerMode === 'wordBg') {
-        presetLabel.innerText = "선택된 글자색 전용 배경 (보색포함)";
+        if (presetLabel) presetLabel.innerText = "선택된 글자색 전용 배경 (보색포함)";
         const row = document.getElementById(activeTargetId);
         const textCol = row ? row.dataset.textCol : '#4a8a54';
         
@@ -2471,7 +2471,7 @@ function applyColorToActiveTarget(color) {
         const label = document.getElementById(`name_label_${activeTargetId}`);
         if (label) label.style.color = color;
         
-        saveImagesToStorage(true);
+        // ⚠️ 자동 저장 호출 제거 (이제 이미지 저장 버튼을 눌러야만 저장됩니다)
         triggerLiveSync(200);
     } 
     else if (pickerMode === 'wordText') {
@@ -2532,7 +2532,7 @@ function injectFromClipboard() {
         });
 
         if (matched > 0) {
-            saveImagesToStorage(true);
+            // ⚠️ 자동 저장 호출 제거 (이제 이미지 저장 버튼을 눌러야만 저장됩니다)
             triggerLiveSync(100);
             showToast(`🍅 ${matched}명 쏙 심기 완료!`);
         } else {

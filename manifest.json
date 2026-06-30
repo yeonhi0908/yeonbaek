@@ -2,7 +2,7 @@
   "namespaces": "cocoforia-tree",
   "name": "연백나무",
   "short_name": "연백나무",
-  "description": "코코포리아 로그를 가공합니다.",
+  "description": "필요한 기능 다 때려넣음",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
